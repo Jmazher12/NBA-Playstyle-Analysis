@@ -1,7 +1,5 @@
 # Results
 
-# Testing
-
 ```{r}
 library(rvest)
 library(dplyr)
