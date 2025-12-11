@@ -29,12 +29,13 @@ season_2017 <- read_html(url_2017) |> html_element("table#per_game-team") |> htm
 url_2018 <- "https://www.basketball-reference.com/leagues/NBA_2019.html"
 season_2018 <- read_html(url_2018) |> html_element("table#per_game-team") |> html_table(fill = TRUE) |> clean_names() |> mutate(season = "2018-19")
 
-win_loss_2014 <- read_csv("/Users/pranavkandula/Desktop/School/Fall 2025/EDAV/Final_P/NBA-Playstyle-Analysis/data/advanced/advanced_stats_nba (2).csv") |> rename(W = W)
-win_loss_2015 <- read_csv("/Users/pranavkandula/Desktop/School/Fall 2025/EDAV/Final_P/NBA-Playstyle-Analysis/data/advanced/advanced_stats_nba_2015.csv") |> rename(W = W)
-win_loss_2016 <- read_csv("/Users/pranavkandula/Desktop/School/Fall 2025/EDAV/Final_P/NBA-Playstyle-Analysis/data/advanced/advanced_stats_nba_2016.csv") |> rename(W = W)
-win_loss_2017 <- read_csv("/Users/pranavkandula/Desktop/School/Fall 2025/EDAV/Final_P/NBA-Playstyle-Analysis/data/advanced/advanced_stats_nba_2017.csv") |> rename(W = W) |> rename(team = Team)
-win_loss_2018 <- read_csv("/Users/pranavkandula/Desktop/School/Fall 2025/EDAV/Final_P/NBA-Playstyle-Analysis/data/advanced/advanced_stats_nba_2018.csv") |> rename(W = W)
-base_path <- "/Users/pranavkandula/Desktop/School/Fall 2025/EDAV/Final_P/NBA-Playstyle-Analysis/data/threep/"
+win_loss_2014 <- read_csv("/Users/joshuamazher/Downloads/Edav Final Project/advanced_stats_nba_2014.csv") |> rename(W = W)
+win_loss_2015 <- read_csv("/Users/joshuamazher/Downloads/Edav Final Project/advanced_stats_nba_2015.csv") |> rename(W = W)
+win_loss_2016 <- read_csv("/Users/joshuamazher/Downloads/Edav Final Project/advanced_stats_nba_2016.csv") |> rename(W = W)
+win_loss_2017 <- read_csv("/Users/joshuamazher/Downloads/Edav Final Project/advanced_stats_nba_2017.csv") |> rename(W = W) |> rename(team = Team)
+win_loss_2018 <- read_csv("/Users/joshuamazher/Downloads/Edav Final Project/advanced_stats_nba_2018.csv") |> rename(W = W)
+
+base_path <- "/Users/joshuamazher/Downloads/Edav Final Project/Data_For_Final_Project/"
 years <- 2007:2019
 yearly_stats <- data.frame()
 
