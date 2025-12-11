@@ -24,9 +24,19 @@
     "href": "index.html",
     "title": "NBA Playstyle Analysis",
     "section": "",
-    "text": "1 Introduction\nThe three-point revolution in the NBA represents one of modern sports’ most dramatic transformations, yet it remains largely unexplored quantitatively. We chose this topic to answer a simple question: How has basketball fundamentally changed? For unfamiliar readers, the NBA is the world’s premier professional basketball league where, historically, games centered on post players (the tallest/biggest people on the court) and half-court offense. Today, they center on perimeter shooting and pace. The three-point line was introduced in 1979 but was largerly not utilized until it became mathematically superior to mid-range shooting. Our central questions are: When did teams collectively adopt this strategy? Did all positions transform equally? And did the revolution actually make basketball better? Through statistical analysis of 46 years of NBA data (1979-2025), we provide quantifiable evidence of how basketball’s most fundamental strategic shift unfolded.",
+    "text": "1 Introduction\nThe three-point revolution in the NBA represents one of modern sports’ most dramatic transformations, yet it remains largely unexplored quantitatively. We chose this topic to answer a simple question: How has basketball fundamentally changed? For unfamiliar readers, the NBA is the world’s premier professional basketball league where, historically, games centered on post players (the tallest/biggest people on the court) and half-court offense. Today, they center on perimeter shooting and pace. The three-point line was introduced in 1979 but was largerly not utilized until it became mathematically superior to mid-range shooting. Our central questions are: When did teams collectively adopt this strategy? Did all positions transform equally? And did the revolution actually make basketball better? Through statistical analysis of 45 years of NBA data (1979-2024), we provide quantifiable evidence of how basketball’s most fundamental strategic shift unfolded.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "conclusion.html",
+    "href": "conclusion.html",
+    "title": "4  Conclusion",
+    "section": "",
+    "text": "The three-point revolution has fundamentally reshaped the NBA, evolving it from a midrange-heavy game into a high-efficiency system defined by “Pace and Space.” Our analysis confirms that this shift was driven not just by an increase in volume, but by a concurrent rise in skill; elite shooters maintained efficiency despite higher usage, and the “skill dividend” expanded to frontcourt players, effectively eliminating the traditional non-shooting center. This evolution has optimized scoring output, as teams mathematically prioritized three-pointers and rim attempts over inefficient long twos. Our data collection process presented significant challenges. Basketball Reference’s data protection mechanisms prevented us from scraping our primary target tables, forcing us to utilize alternative tables that contained the necessary metrics. Additionally, merging these disparate sources required data cleaning to standardize inconsistent column names and formats across different seasons. Future research could expand on this foundation by analyzing the specific defensive schemes evolved to counter this spacing or by isolating individual player archetypes to see which specific roles have gained or lost the most value in this new era.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Conclusion</span>"
     ]
   }
 ]
