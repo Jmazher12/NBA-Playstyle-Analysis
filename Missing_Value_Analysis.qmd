@@ -1,0 +1,56 @@
+---
+title: "MissingValueAnalysis_Final_Project"
+editor: visual
+---
+
+```{r}
+# Missing values by variable in league_avgs
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+
+missing_league_avgs <- league_avgs |>
+  summarise(across(everything(), ~ sum(is.na(.)))) |>
+  pivot_longer(everything(), names_to = "variable", values_to = "n_missing")
+
+ggplot(missing_league_avgs, aes(x = reorder(variable, n_missing), y = n_missing)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(
+    title = "Missing Values by Variable (league_avgs)",
+    x = "Variable",
+    y = "Number of Missing Values"
+  ) +
+  theme_minimal()
+
+```
+
+```{r}
+# Missing values over time in league_avgs
+missing_by_season <- league_avgs |>
+  mutate(n_missing_row = apply(across(everything()), 1, function(x) sum(is.na(x)))) |>
+  group_by(start_year) |>
+  summarise(total_missing = sum(n_missing_row), .groups = "drop")
+
+ggplot(missing_by_season, aes(x = start_year, y = total_missing)) +
+  geom_line(color = "coral", linewidth = 1.1) +
+  geom_point(color = "coral", size = 2.5) +
+  labs(
+    title = "Missing Values Over Time (league_avgs)",
+    x = "Season start year",
+    y = "Total Missing Values per Season"
+  ) +
+  theme_minimal()
+
+```
+
+The two missing-value plots show that the league_avgs data pulled from Basketball-Reference is essentially complete, with zero missing entries across all variables and seasons. This is consistent with the way Sports Reference curates league summary tables, which are built directly from official NBA box scores and are intended for public historical reference, so gaps in basic rate and counting statistics are rare. From a modeling perspective, the absence of missingness is helpful because it removes the need for imputation or listwise deletion and ensures that long-run trends in three-point shooting, pace, and efficiency are not driven by differences in data completeness across eras.
+
+
+
+
+
+
+
+
+

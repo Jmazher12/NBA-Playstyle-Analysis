@@ -2,4 +2,96 @@
 
 ## Description
 
+For this project, the primary data source is Basketball-Reference.com, part of the Sports Reference network, which compiles official NBA box score and play-by-play data into public, queryable tables such as league per-game stats, team per-game stats, and player per-game stats by season. The underlying data originate from official NBA game statistics, which Sports Reference ingests and curates. All of the tables used in the code are delivered as HTML tables with one row per team or player and one column per statistic (e.g., 3PA, 3P%, FT%, ORtg, pace), which can be converted into rectangular data frames where rows correspond to seasons, teams, or players and columns to numeric or categorical variables. The temporal coverage for the league-level tables used here runs from the introduction of the three-point line in 1979–80 to the most recent completed or in-progress season. A key limitation is that Basketball-Reference occasionally changes column names, table structures, and adds extra header rows, which can break automated scrapers, and the site does not provide an official, stable API; in addition, the project relies on locally stored CSV files of advanced team stats for specific seasons that were originally downloaded from Basketball-Reference but are not directly accessible via a public URL, so their exact provenance must be documented manually and they must be refreshed by re-downloading updated CSVs if the underlying site structure or statistics change. 
+
+
 ## Missing value analysis
+```{r}
+library(rvest)
+library(dplyr)
+library(janitor)
+library(ggplot2)
+library(stringr)
+library(plotly)
+library(purrr)
+library(tidyverse)
+library(scales)
+
+#===============================================================================
+# DATA LOADING: GLOBAL DATASETS
+#===============================================================================
+
+# Load league-level statistics from Basketball Reference
+url <- "https://www.basketball-reference.com/leagues/NBA_stats_per_game.html"
+league_avgs <- url |>
+  read_html() |>
+  html_element("table") |>
+  html_table(fill = TRUE) |>
+  row_to_names(row_number = 1) |>
+  clean_names() |>
+  mutate(season = as.character(season))
+
+league_avgs <- league_avgs |>
+  mutate(start_year = as.numeric(str_sub(season, 1, 4))) |>
+  filter(start_year >= 1979) |>
+  select(-start_year) |>
+  mutate(start_year = as.numeric(str_sub(season, 1, 4)),
+         x3pa_num = as.numeric(x3pa))
+
+# Load league stats for pace and offensive rating
+url <- "https://www.basketball-reference.com/leagues/NBA_stats_per_game.html"
+league_stats <- read_html(url) |>
+  html_element("table") |>
+  html_table(fill = TRUE) |>
+  row_to_names(row_number = 1) |>
+  clean_names() |>
+  filter(season != "Season") |>
+  mutate(
+    season_start = as.numeric(str_sub(season, 1, 4)),
+    ortg = as.numeric(o_rtg), 
+    pace = as.numeric(pace)
+  ) |>
+  filter(season_start >= 1980)
+
+```
+
+
+```{r}
+# Missing values by variable in league_avgs
+
+missing_league_avgs <- league_avgs |>
+  summarise(across(everything(), ~ sum(is.na(.)))) |>
+  pivot_longer(everything(), names_to = "variable", values_to = "n_missing")
+
+ggplot(missing_league_avgs, aes(x = reorder(variable, n_missing), y = n_missing)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(
+    title = "Missing Values by Variable (league_avgs)",
+    x = "Variable",
+    y = "Number of Missing Values"
+  ) +
+  theme_minimal()
+
+```
+
+```{r}
+# Missing values over time in league_avgs
+missing_by_season <- league_avgs |>
+  mutate(n_missing_row = apply(across(everything()), 1, function(x) sum(is.na(x)))) |>
+  group_by(start_year) |>
+  summarise(total_missing = sum(n_missing_row), .groups = "drop")
+
+ggplot(missing_by_season, aes(x = start_year, y = total_missing)) +
+  geom_line(color = "coral", linewidth = 1.1) +
+  geom_point(color = "coral", size = 2.5) +
+  labs(
+    title = "Missing Values Over Time (league_avgs)",
+    x = "Season start year",
+    y = "Total Missing Values per Season"
+  ) +
+  theme_minimal()
+
+```
+
+The two missing-value plots show that the league_avgs data pulled from Basketball-Reference is essentially complete, with zero missing entries across all variables and seasons. This is consistent with the way Sports Reference curates league summary tables, which are built directly from official NBA box scores and are intended for public historical reference, so gaps in basic rate and counting statistics are rare. From a modeling perspective, the absence of missingness is helpful because it removes the need for imputation or listwise deletion and ensures that long-run trends in three-point shooting, pace, and efficiency are not driven by differences in data completeness across eras.
